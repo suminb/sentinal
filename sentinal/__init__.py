@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask
+from flask.ext.admin import Admin
+from flask.ext.admin.contrib.sqla import ModelView
 
 
 def create_app(name=__name__, config={},
@@ -19,5 +21,13 @@ def create_app(name=__name__, config={},
 
     from sentinal.main import main_module
     app.register_blueprint(main_module, url_prefix='/')
+
+    from sentinal.models import Article
+
+    admin = Admin()
+    admin.init_app(app)
+    classes = [Article]
+    for cls in classes:
+        admin.add_view(ModelView(cls, db.session))
 
     return app
