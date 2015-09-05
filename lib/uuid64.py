@@ -38,9 +38,11 @@ class UUID64(object):
 
 
 def issue():
-    local_ip = os.environ.get(
-        'IPV4_ADDR',
-        socket.gethostbyname(socket.gethostname()))
+    try:
+        ipv4_addr = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        ipv4_addr = '127.0.0.1'
+    local_ip = os.environ.get('IPV4_ADDR', ipv4_addr)
     node_id = ip2int(local_ip) % (2 ** 16)
     uuid = UUID64(node_id)
     return uuid.issue()
