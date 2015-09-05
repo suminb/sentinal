@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask.ext.sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import ARRAY
+# from sqlalchemy.dialects.postgresql import ARRAY
 
 import uuid64
 
@@ -89,11 +89,11 @@ class CRUDMixin(object):
 
 class Article(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
-    authors = db.Column(ARRAY(db.String))
+    authors = db.Column(db.String)
     publish_date = db.Column(db.DateTime(timezone=False))
-    fetch_date = db.Column(db.DateTime(timezone=False))
     title = db.Column(db.String)
     text = db.Column(db.Text)
+    flags = db.Column(db.Integer)
 
 
 class Word(db.Model, CRUDMixin):
