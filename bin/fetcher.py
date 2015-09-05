@@ -6,6 +6,9 @@ from sentinal import create_app
 from sentinal.models import db, Article as ArticleEntity
 
 
+FLAG_EXTRACTED_KEYWORDS = 0x0001
+FLAG_SENTIMENT_ANALYSIS = 0x0002
+
 app = create_app()
 
 
@@ -30,12 +33,15 @@ def fetch_article(url):
             authors='|'.join(article.authors),
             title=article.title,
             text=article.text,
-
+            flags=0,
         )
+
 
 @cli.command()
 def extract_keywords():
-    pass
+    with app.app_context():
+        for entity in ArticleEntity.query.filter(ArticleEntity.flags == 0):
+            print(entity)
 
 
 @cli.command()

@@ -87,6 +87,13 @@ class CRUDMixin(object):
         return d
 
 
+article_word_assoc = db.Table(
+    'article_word_assoc',
+    db.Column('article_id', db.BigInteger, db.ForeignKey('article.id')),
+    db.Column('word_id', db.BigInteger, db.ForeignKey('word.id'))
+)
+
+
 class Article(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     authors = db.Column(db.String)
@@ -100,14 +107,9 @@ class Word(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     word = db.Column(db.String)
     language = db.Column(db.String(10))
-
-
-article_word_assoc = db.Table(
-    'article_word_assoc',
-    db.Column('article_id', db.BigInteger, db.ForeignKey('article.id')),
-    db.Column('word_id', db.BigInteger, db.ForeignKey('word.id'))
-)
-
+    articles = db.relationship('Article',
+                               secondary=article_word_assoc,
+                               backref='word', lazy='dynamic')
 
 # We also need a web page fetcher and a URL extractor but we probably want to
 # make them as an independent module
