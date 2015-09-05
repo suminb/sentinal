@@ -1,0 +1,6 @@
+click
+flask
+flask-sqlalchemy
+requests
+psycopg2
+git+https://github.com/codelucas/newspaper.git
