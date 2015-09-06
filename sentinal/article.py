@@ -6,6 +6,14 @@ from sentinal.models import Article, FLAG_TO_BE_DOWNLOADED
 article_module = Blueprint('article', __name__)
 
 
+@article_module.route('/list')
+def list_():
+    """Show recent N articles."""
+    articles = Article.query.order_by(Article.id).limit(15)
+    context = dict(articles=articles)
+    return render_template('article/list.html', **context)
+
+
 @article_module.route('/add_url', methods=['get', 'post'])
 def add_url():
     """FIXME: This is a temporary page for debugging."""
