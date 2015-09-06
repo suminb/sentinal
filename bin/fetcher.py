@@ -1,9 +1,11 @@
 import click
 
 from newspaper import Article
+from konlpy.tag import Kkma
+from konlpy.utils import pprint
 
 from sentinal import create_app
-from sentinal.models import db, Article as ArticleEntity
+from sentinal.models import db, Article as ArticleEntity, Word
 
 
 FLAG_EXTRACTED_KEYWORDS = 0x0001
@@ -40,8 +42,15 @@ def fetch_article(url):
 @cli.command()
 def extract_keywords():
     with app.app_context():
-        for entity in ArticleEntity.query.filter(ArticleEntity.flags == 0):
-            print(entity)
+        kkma = Kkma()
+        for article in ArticleEntity.query.filter(ArticleEntity.flags == 0):
+            keywords = kkma.nouns(article.text)
+
+            for keyword in keywords:
+                word = Word.create(word=keyword)
+                article.keywords.append(word)
+
+        db.session.commit()
 
 
 @cli.command()
