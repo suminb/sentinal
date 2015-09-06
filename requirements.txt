@@ -2,6 +2,7 @@ click
 flask
 flask-admin
 flask-sqlalchemy
+flask-wtf
 requests
 psycopg2
 konlpy

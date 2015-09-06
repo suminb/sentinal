@@ -94,6 +94,8 @@ article_word_assoc = db.Table(
 )
 
 
+FLAG_TO_BE_DOWNLOADED = 0x0004
+
 class Article(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     authors = db.Column(db.String)

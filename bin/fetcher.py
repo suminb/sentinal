@@ -57,7 +57,7 @@ def extract_keywords():
                     # If duplicate is found
                     word = Word.query.filter(Word.word == keyword).first()
                 article.keywords.append(word)
-                article.flags |= FLAG_EXTRACTED_KEYWORDS
+            article.flags |= FLAG_EXTRACTED_KEYWORDS
 
         db.session.commit()
 

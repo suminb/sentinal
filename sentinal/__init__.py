@@ -22,12 +22,16 @@ def create_app(name=__name__, config={},
     from sentinal.main import main_module
     app.register_blueprint(main_module, url_prefix='/')
 
+    from sentinal.article import article_module
+    app.register_blueprint(article_module, url_prefix='/article')
+
     from sentinal.models import Article, Word
 
     admin = Admin()
     admin.init_app(app)
     classes = [Article, Word]
     for cls in classes:
-        admin.add_view(ModelView(cls, db.session))
+        admin.add_view(ModelView(cls, db.session,
+                                 endpoint='admin_{}'.format(cls.__name__)))
 
     return app
