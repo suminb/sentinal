@@ -33,6 +33,7 @@ def fetch_article(url):
     with app.app_context():
         entity = ArticleEntity.create(
             publish_date=article.publish_date,
+            url=article.url,
             authors='|'.join(article.authors),
             title=article.title,
             text=article.text,

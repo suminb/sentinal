@@ -98,7 +98,7 @@ class Article(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     authors = db.Column(db.String)
     publish_date = db.Column(db.DateTime(timezone=False))
-    url = db.Column(db.String)
+    url = db.Column(db.String, unique=True)
     title = db.Column(db.String)
     text = db.Column(db.Text)
     flags = db.Column(db.Integer)
