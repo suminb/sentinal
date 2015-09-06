@@ -1,5 +1,6 @@
-import click
 
+import click
+from sqlalchemy.exc import IntegrityError
 from newspaper import Article
 from konlpy.tag import Kkma
 from konlpy.utils import pprint
@@ -47,8 +48,15 @@ def extract_keywords():
             keywords = kkma.nouns(article.text)
 
             for keyword in keywords:
-                word = Word.create(word=keyword)
+                click.echo('keyword {}'.format(keyword))
+                try:
+                    word = Word.create(word=keyword)
+                except IntegrityError:
+                    db.session.rollback()
+                    # If duplicate is found
+                    word = Word.query.filter(Word.word == keyword).first()
                 article.keywords.append(word)
+                article.flags |= FLAG_EXTRACTED_KEYWORDS
 
         db.session.commit()
 

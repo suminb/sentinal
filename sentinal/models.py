@@ -98,6 +98,7 @@ class Article(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
     authors = db.Column(db.String)
     publish_date = db.Column(db.DateTime(timezone=False))
+    url = db.Column(db.String)
     title = db.Column(db.String)
     text = db.Column(db.Text)
     flags = db.Column(db.Integer)
@@ -107,7 +108,7 @@ class Article(db.Model, CRUDMixin):
 
 class Word(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)
-    word = db.Column(db.String)
+    word = db.Column(db.String, unique=True)
     language = db.Column(db.String(10))
 
 # We also need a web page fetcher and a URL extractor but we probably want to
