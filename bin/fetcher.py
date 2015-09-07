@@ -1,12 +1,13 @@
 
 import click
 from sqlalchemy.exc import IntegrityError
-from newspaper import Article
+from newspaper import Article as NewsArticle
 from konlpy.tag import Kkma
 from konlpy.utils import pprint
 
 from sentinal import create_app
-from sentinal.models import db, Article as ArticleEntity, Word
+from sentinal.models import db, Article as ArticleEntity, Word, \
+    FLAG_TO_BE_DOWNLOADED
 
 
 FLAG_EXTRACTED_KEYWORDS = 0x0001
@@ -23,7 +24,7 @@ def cli():
 @cli.command()
 @click.argument('url')
 def fetch_article(url):
-    article = Article(url)
+    article = NewsArticle(url)
     article.download()
     article.parse()
     article.nlp()
@@ -39,6 +40,26 @@ def fetch_article(url):
             text=article.text,
             flags=0,
         )
+
+
+@cli.command()
+def fetch_articles():
+    with app.app_context():
+        for article in ArticleEntity.query.filter(
+                ArticleEntity.flags == FLAG_TO_BE_DOWNLOADED):
+
+            news_article = NewsArticle(article.url)
+            news_article.download()
+            news_article.parse()
+            news_article.nlp()
+
+            article.publish_date = news_article.publish_date
+            article.authors = '|'.join(news_article.authors),
+            article.title = news_article.title
+            article.text = news_article.text
+            article.flags = 0
+
+            db.session.commit()
 
 
 @cli.command()
