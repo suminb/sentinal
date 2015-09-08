@@ -1,6 +1,6 @@
 from flask import Blueprint, request, redirect, render_template, url_for
 
-from sentinal.forms import AddUrlForm
+from sentinal.forms import AddUrlForm, ArticleForm
 from sentinal.models import Article, FLAG_TO_BE_DOWNLOADED
 
 article_module = Blueprint('article', __name__)
@@ -12,6 +12,24 @@ def list_():
     articles = Article.query.order_by(Article.id).limit(15)
     context = dict(articles=articles)
     return render_template('article/list.html', **context)
+
+
+@article_module.route('/edit/<int:article_id>', methods=['get', 'post'])
+@article_module.route('/edit/new', methods=['get', 'post'])
+def edit(article_id=None):
+    """Manually add/edit an article to the database."""
+    if article_id is None:
+        article = None
+    else:
+        article = Article.query.get(article_id)
+    form = ArticleForm(request.form, obj=article)
+
+    if form.validate_on_submit():
+        # do something
+        return redirect(url_for('article.edit', article_id=article_id))
+
+    context = dict(form=form, article=article)
+    return render_template('article/edit.html', **context)
 
 
 @article_module.route('/add_url', methods=['get', 'post'])
