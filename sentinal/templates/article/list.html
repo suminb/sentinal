@@ -1,6 +1,10 @@
 
 <ul>
   {% for article in articles %}
-  <li>{{ article.title }}</li>
+  <li>
+    <a href="{{ url_for('article.view', article_id=article.id) }}">
+      {{ article.title }}
+    </a>
+  </li>
   {% endfor %}
 </ul>

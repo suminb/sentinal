@@ -14,6 +14,13 @@ def list_():
     return render_template('article/list.html', **context)
 
 
+@article_module.route('/<int:article_id>')
+def view(article_id):
+    article = Article.query.get(article_id)
+    context = dict(article=article)
+    return render_template('article/view.html', **context)
+
+
 @article_module.route('/edit/<int:article_id>', methods=['get', 'post'])
 @article_module.route('/edit/new', methods=['get', 'post'])
 def edit(article_id=None):
