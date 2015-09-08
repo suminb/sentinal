@@ -32,17 +32,21 @@ def edit(article_id=None):
     return render_template('article/edit.html', **context)
 
 
-@article_module.route('/add_url', methods=['get', 'post'])
-def add_url():
+@article_module.route('/add', methods=['get', 'post'])
+def add():
     """FIXME: This is a temporary page for debugging."""
     article = None
     form = AddUrlForm(request.form)
 
     if form.validate_on_submit():
-        article = Article.create(url=form.url.data,
-                                 flags=FLAG_TO_BE_DOWNLOADED)
+        # article = Article.create(url=form.url.data,
+        #                          flags=FLAG_TO_BE_DOWNLOADED)
+        from newspaper import Article as NewsArticle
+        news_article = NewsArticle(form.url.data)
+        news_article.build()
+        Article.create_from_news_article(news_article)
 
-        return redirect(url_for('article.add_url'))
+        return redirect(url_for('article.add'))
 
     context = dict(form=form, article=article)
     return render_template('article/add_url.html', **context)

@@ -107,6 +107,26 @@ class Article(db.Model, CRUDMixin):
     keywords = db.relationship('Word', secondary=article_word_assoc,
                                backref='article', lazy='dynamic')
 
+    @staticmethod
+    def create_from_news_article(news_article):
+        """Create an `Article` instance from a `newspaper.Article` instance.
+
+        :type news_article: newspaper.Article
+        """
+        if news_article.publish_date:
+            publish_date = news_article.publish_date
+        else:
+            publish_date = None
+
+        return Article.create(
+            publish_date=publish_date,
+            url=news_article.url,
+            authors='|'.join(news_article.authors),
+            title=news_article.title,
+            text=news_article.text,
+            flags=0,
+        )
+
 
 class Word(db.Model, CRUDMixin):
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=False)

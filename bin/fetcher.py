@@ -25,21 +25,12 @@ def cli():
 @click.argument('url')
 def fetch_article(url):
     article = NewsArticle(url)
-    article.download()
-    article.parse()
-    article.nlp()
+    article.build()
 
     print(article.keywords)
 
     with app.app_context():
-        entity = ArticleEntity.create(
-            publish_date=article.publish_date,
-            url=article.url,
-            authors='|'.join(article.authors),
-            title=article.title,
-            text=article.text,
-            flags=0,
-        )
+        ArticleEntity.create_from_news_article(article)
 
 
 @cli.command()
