@@ -24,7 +24,9 @@ def view(article_id):
 @article_module.route('/edit/<int:article_id>', methods=['get', 'post'])
 @article_module.route('/edit/new', methods=['get', 'post'])
 def edit(article_id=None):
-    """Manually add/edit an article to the database."""
+    """Manually add/edit an article to the database. This page is probably
+    unnecessary unless it provides extra functionalities that the admin
+    interface does not."""
     if article_id is None:
         article = None
     else:
@@ -56,4 +58,4 @@ def add():
         return redirect(url_for('article.add'))
 
     context = dict(form=form, article=article)
-    return render_template('article/add_url.html', **context)
+    return render_template('article/add.html', **context)
