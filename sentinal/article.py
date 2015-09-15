@@ -17,12 +17,6 @@ def list_():
 @article_module.route('/<int:article_id>')
 def view(article_id):
     article = Article.query.get(article_id)
-
-    # FIXME: This should be cached
-    # from konlpy.tag import Kkma
-    # kkma = Kkma()
-    # nouns = kkma.nouns(article.text)
-
     context = dict(article=article)
 
     return render_template('article/view.html', **context)

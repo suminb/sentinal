@@ -131,7 +131,9 @@ class Article(db.Model, CRUDMixin):
 
     def word_frequencies(self):
         kkma = Kkma()
-        nouns = kkma.nouns(self.text)
+        # nouns = kkma.nouns(self.text)
+        # NOTE: Is this okay?
+        nouns = [w for w, p in filter(lambda pos: pos[1] == 'NNG', kkma.pos(self.text))] 
         freq_dist = nltk.FreqDist(nouns)
         return freq_dist.most_common()
 
