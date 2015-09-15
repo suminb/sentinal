@@ -1,7 +1,9 @@
 from datetime import datetime
 
+import nltk
 from flask.ext.sqlalchemy import SQLAlchemy
 # from sqlalchemy.dialects.postgresql import ARRAY
+from konlpy.tag import Kkma
 
 import uuid64
 
@@ -126,6 +128,12 @@ class Article(db.Model, CRUDMixin):
             text=news_article.text,
             flags=0,
         )
+
+    def word_frequencies(self):
+        kkma = Kkma()
+        nouns = kkma.nouns(self.text)
+        freq_dist = nltk.FreqDist(nouns)
+        return freq_dist.most_common()
 
 
 class Word(db.Model, CRUDMixin):
