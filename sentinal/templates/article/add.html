@@ -1,6 +1,10 @@
+{% extends 'layout.html' %}
 {% from 'macros.html' import render_field %}
+{% block content %}
+<div class="container" role="main">
 <form method="post">
   {{ form.csrf_token }}
   {{ render_field(form.url) }}
   <button>Submit</button>
 </form>
+{% endblock %}

@@ -1,15 +1,24 @@
 {% extends 'layout.html' %}
 {% block content %}
 <div class="container" role="main">
-  <ul>
-    {% for article in articles %}
-    <li>
-      <a href="{{ url_for('article.view', article_id=article.id) }}">
-        {{ article.title }}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+  <table class="table">
+    <thead>
+      <th>Title</th>
+      <th>Publish Date</th>
+    </thead>
+    <tbody>
+      {% for article in articles %}
+      <tr>
+        <td>
+          <a href="{{ url_for('article.view', article_id=article.id) }}">
+            {{ article.title }}
+          </a>
+        </td>
+        <td>{{ article.publish_date }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   <a class="btn btn-default" href="{{ url_for('article.add') }}">Add</a>
 </div>
 {% endblock %}
